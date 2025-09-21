@@ -1,0 +1,9 @@
+{% autoescape off %}
+Olá {{ user.email }},
+
+Por favor, clique no link abaixo para confirmar seu registro:
+
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+Este link de confirmação irá expirar em 2 horas.
+{% endautoescape %}

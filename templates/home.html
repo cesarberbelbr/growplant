@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Growplant{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h1 class="card-title">Bem-vindo(a) ao Growplant!</h1>
+        
+        <!-- Bloco para exibir mensagens (como a de login bem-sucedido) -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <p class="lead">Você está logado com o e-mail: <strong>{{ user.email }}</strong></p>
+        <hr>
+        <p>Este é o seu painel principal. A partir daqui, você poderá gerenciar suas plantas e configurações.</p>
+        <a href="{% url 'logout' %}" class="btn btn-danger">Sair da Conta</a>
+    </div>
+</div>
+{% endblock %}
