@@ -49,3 +49,21 @@ class CustomSetPasswordForm(SetPasswordForm):
         label="Confirmação da Nova Senha",
         widget=forms.PasswordInput(attrs={'autocomplete': 'new-password', 'placeholder': 'Confirme sua nova senha'})
     )
+
+class UserProfileForm(forms.ModelForm):
+    first_name = forms.CharField(
+        label="Nome",
+        max_length=150,
+        required=False, # O nome não é obrigatório
+        widget=forms.TextInput(attrs={'placeholder': 'Seu primeiro nome'})
+    )
+    last_name = forms.CharField(
+        label="Sobrenome",
+        max_length=150,
+        required=False, # O sobrenome não é obrigatório
+        widget=forms.TextInput(attrs={'placeholder': 'Seu sobrenome'})
+    )
+
+    class Meta:
+        model = CustomUser
+        fields = ('first_name', 'last_name')

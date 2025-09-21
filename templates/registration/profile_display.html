@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Meu Perfil{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h2>Perfil do Usuário</h2>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">E-mail</dt>
+                    <dd class="col-sm-9">{{ user.email }}</dd>
+
+                    <dt class="col-sm-3">Nome</dt>
+                    <dd class="col-sm-9">{{ user.first_name|default:"Não informado" }}</dd>
+
+                    <dt class="col-sm-3">Sobrenome</dt>
+                    <dd class="col-sm-9">{{ user.last_name|default:"Não informado" }}</dd>
+                </dl>
+
+                <hr>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{% url 'profile_edit' %}" class="btn btn-primary">Editar Perfil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

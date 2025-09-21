@@ -11,7 +11,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 
-from .forms import CustomUserCreationForm, LoginForm
+from .forms import CustomUserCreationForm, LoginForm, UserProfileForm
 from .models import CustomUser
 from .tokens import account_activation_token
 
@@ -140,3 +140,31 @@ def logout_view(request):
     logout(request)
     messages.info(request, 'Você saiu da sua conta.')
     return redirect('login')
+
+
+@login_required
+def profile_display_view(request):
+    """
+    View para apenas EXIBIR as informações do perfil.
+    """
+    # O objeto 'user' já está disponível em templates de views protegidas
+    return render(request, 'registration\\profile_display.html')
+
+
+@login_required
+def profile_edit_view(request):
+    """
+    View para EDITAR as informações do perfil.
+    """
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Seu perfil foi atualizado com sucesso!')
+            # Após salvar, redireciona de volta para a PÁGINA DE VISUALIZAÇÃO
+            return redirect('profile_display')
+    else:
+        form = UserProfileForm(instance=request.user)
+
+    # Renomeamos o template para ficar mais claro
+    return render(request, 'registration\\profile_edit.html', {'form': form})
