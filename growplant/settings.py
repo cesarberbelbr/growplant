@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'user.apps.UserConfig',
+    'cultivation.apps.CultivationConfig',
+
     'crispy_forms',
     'crispy_bootstrap5',
 ]

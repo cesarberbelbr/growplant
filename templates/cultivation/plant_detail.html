@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Detalhes: {{ object.name }}{% endblock %}
+{% block content %}
+<div class="card shadow-sm">
+<div class="card-header d-flex justify-content-between align-items-center">
+<h2>{{ object.name }} <small class="text-muted">({{ object.strain }})</small></h2>
+<div>
+<a href="{% url 'cultivation:plant_edit' pk=object.pk %}" class="btn btn-primary">Editar</a>
+<a href="{% url 'cultivation:plant_delete' pk=object.pk %}" class="btn btn-danger">Excluir</a>
+</div>
+</div>
+<div class="card-body">
+<dl class="row">
+<dt class="col-sm-3">Idade (dias)</dt>
+<dd class="col-sm-9">{{ object.age_in_days }} dias</dd>
+<dt class="col-sm-3">Idade (semanas)</dt>
+        <dd class="col-sm-9">{{ object.age_in_weeks }}</dd>
+
+        <dt class="col-sm-3">Estágio Atual</dt>
+        <dd class="col-sm-9">{{ object.get_stage_display }}</dd>
+
+        <dt class="col-sm-3">Data de Germinação</dt>
+        <dd class="col-sm-9">{{ object.germination_date|date:"d/m/Y" }}</dd>
+
+        <dt class="col-sm-3">Ambiente</dt>
+        <dd class="col-sm-9">
+            {% if object.environment %}
+                <a href="{% url 'cultivation:environment_detail' pk=object.environment.pk %}">{{ object.environment.name }}</a>
+            {% else %}
+                Não está em um ambiente.
+            {% endif %}
+        </dd>
+        <dt class="col-sm-3">Status</dt>
+        <dd class="col-sm-9">
+            {% if object.is_active %}
+            <span class="badge bg-success">Ativa</span>
+            {% else %}
+            <span class="badge bg-secondary">Inativa</span>
+            {% endif %}
+        </dd>
+    </dl>
+</div>
+<div class="card-footer">
+    <a href="{% url 'cultivation:plant_list' %}">Voltar para a lista</a>
+</div>
+</div>
+{% endblock %}```

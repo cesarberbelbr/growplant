@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Catálogo de Luzes{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1>Fontes de Luz Disponíveis</h1>
+    <p class="text-muted">Esta é uma lista de todas as fontes de luz cadastradas no sistema. Você pode adicioná-las aos seus ambientes.</p>
+</div>
+
+<ul class="list-group shadow-sm">
+{% for light in lights %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>{{ light.get_light_type_display }}</span>
+        <strong>{{ light.watts }}W</strong>
+    </li>
+{% empty %}
+    <li class="list-group-item">Nenhuma fonte de luz cadastrada no sistema.</li>
+{% endfor %}
+</ul>
+{% endblock %}

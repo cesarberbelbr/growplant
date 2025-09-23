@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Minhas Plantas{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Minhas Plantas</h1>
+    <a href="{% url 'cultivation:plant_add' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle-fill me-1"></i> Adicionar Planta
+    </a>
+</div>
+
+<!-- Loop Principal: Itera sobre os ambientes -->
+{% for environment, plants_in_env in plants_by_environment.items %}
+<div class="card shadow-sm mb-4">
+    <div class="card-header">
+        <h4><a href="{% url 'cultivation:environment_detail' pk=environment.pk %}" class="text-decoration-none text-dark">{{ environment.name }}</a></h4>
+    </div>
+    <div class="card-body">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3">
+            <!-- Loop Aninhado: Itera sobre as plantas DENTRO de cada ambiente -->
+            {% for plant in plants_in_env %}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ plant.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ plant.strain }}</h6>
+                        <span class="badge bg-info">{{ plant.get_stage_display }}</span>
+                        <span class="badge bg-secondary">{{ plant.age_in_weeks }}</span>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="{% url 'cultivation:plant_detail' pk=plant.pk %}" class="btn btn-sm btn-secondary">
+                            Ver Diário
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Card para plantas sem ambiente -->
+{% if plants_without_environment %}
+<div class="card shadow-sm mb-4">
+    <div class="card-header">
+        <h4>Sem Ambiente Definido</h4>
+    </div>
+    <div class="card-body">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3">
+            {% for plant in plants_without_environment %}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ plant.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ plant.strain }}</h6>
+                        <span class="badge bg-info">{{ plant.get_stage_display }}</span>
+                        <span class="badge bg-secondary">{{ plant.age_in_weeks }}</span>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="{% url 'cultivation:plant_detail' pk=plant.pk %}" class="btn btn-sm btn-secondary">
+                            Ver Diário
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Mensagem para quando não há absolutamente nenhuma planta -->
+{% if not plants_by_environment and not plants_without_environment %}
+<div class="card text-center">
+    <div class="card-body">
+        <h5 class="card-title">Nenhuma planta cadastrada</h5>
+        <p class="card-text">Que tal começar seu cultivo agora?</p>
+        <a href="{% url 'cultivation:plant_add' %}" class="btn btn-primary">Adicionar minha primeira planta</a>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title">{{ page_title }}</h2>
+                <hr>
+                <form method="post">
+                    {% csrf_token %}
+
+                    <!-- 1. Renderiza todos os campos automaticamente com o Crispy -->
+                    {{ form|crispy }}
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a href="{% url 'cultivation:environment_list' %}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. Adiciona o botão "Nova Luz" dinamicamente com JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Encontra o rótulo do campo de iluminação
+        const lightingLabel = document.querySelector('label[for="id_lighting_system"]');
+
+        if (lightingLabel) {
+            // Cria o link (botão)
+            const newLightLink = document.createElement('a');
+            newLightLink.href = "{% url 'cultivation:lighting_add' %}";
+            newLightLink.className = 'btn btn-sm btn-outline-success ms-auto';
+            newLightLink.target = '_blank';
+            newLightLink.rel = 'noopener noreferrer';
+            newLightLink.innerHTML = '<i class="bi bi-plus-circle-fill me-1"></i> Nova Luz';
+
+            // Pega o div pai que o Crispy cria para o campo
+            const parentDiv = lightingLabel.closest('.mb-3');
+            if (parentDiv) {
+                // Pega o label dentro do div pai
+                const innerLabel = parentDiv.querySelector('label');
+                // Adiciona classes do Flexbox ao label para alinhar o texto e o botão
+                innerLabel.classList.add('d-flex', 'justify-content-between', 'align-items-center', 'w-100');
+                // Adiciona o nosso link dentro do label
+                innerLabel.appendChild(newLightLink);
+            }
+        }
+    });
+</script>
+
+{% endblock %}
