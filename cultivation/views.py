@@ -4,8 +4,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
-from .models import Environment, Lighting, Plant
-from .forms import EnvironmentForm, LightingForm, PlantForm
+from .models import Environment, Lighting, Plant, Stage
+from .forms import EnvironmentForm, LightingForm, PlantForm, StageForm
 
 
 # --- Views para Environments (Ambientes) ---
@@ -222,3 +222,45 @@ class PlantDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMix
     def test_func(self):
         plant = self.get_object()
         return self.request.user == plant.owner
+
+
+class StageListView(LoginRequiredMixin, ListView):
+    model = Stage
+    template_name = 'cultivation/stage_list.html'
+    context_object_name = 'stages'
+
+    def get_queryset(self):
+        return Stage.objects.filter(owner=self.request.user)
+
+
+class StageCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = Stage
+    form_class = StageForm
+    template_name = 'cultivation/stage_form.html'
+    success_url = reverse_lazy('cultivation:stage_list')
+    success_message = "Estágio '%(name)s' criado com sucesso!"
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+
+class StageUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
+    model = Stage
+    form_class = StageForm
+    template_name = 'cultivation/stage_form.html'
+    success_url = reverse_lazy('cultivation:stage_list')
+    success_message = "Estágio '%(name)s' atualizado com sucesso!"
+
+    def test_func(self):
+        return self.request.user == self.get_object().owner
+
+
+class StageDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, DeleteView):
+    model = Stage
+    template_name = 'cultivation/stage_confirm_delete.html'
+    success_url = reverse_lazy('cultivation:stage_list')
+    success_message = "Estágio excluído com sucesso!"
+
+    def test_func(self):
+        return self.request.user == self.get_object().owner

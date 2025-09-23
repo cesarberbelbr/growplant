@@ -90,11 +90,49 @@ class Environment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.name} - {self.owner.email}"
+        return f"{self.name}"
 
     class Meta:
         verbose_name = _("Ambiente de Cultivo")
         verbose_name_plural = _("Ambientes de Cultivo")
+
+class Stage(models.Model):
+    """
+    Representa um estágio de cultivo customizável pelo usuário.
+    """
+    class DurationUnit(models.TextChoices):
+        DAYS = 'D', _('Dias')
+        WEEKS = 'W', _('Semanas')
+
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='stages'
+    )
+    name = models.CharField(max_length=100, verbose_name=_("Nome do Estágio"))
+    light_hours_on = models.PositiveSmallIntegerField(
+        default=12,
+        verbose_name=_("Horas de Luz (Ligada)"),
+        help_text=_("Número de horas que as luzes ficam LIGADAS por dia neste estágio.")
+    )
+    duration = models.PositiveIntegerField(
+        verbose_name=_("Duração Estimada")
+    )
+    duration_unit = models.CharField(
+        max_length=1,
+        choices=DurationUnit.choices,
+        default=DurationUnit.WEEKS,
+        verbose_name=_("Unidade de Duração")
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _("Estágio de Cultivo")
+        verbose_name_plural = _("Estágios de Cultivo")
+        # Garante que um usuário não pode ter dois estágios com o mesmo nome
+        unique_together = ('owner', 'name')
 
 class Plant(models.Model):
     """
@@ -135,10 +173,11 @@ class Plant(models.Model):
         help_text=_("O nome da variedade ou 'strain'. Ex: White Widow, Tomate Cereja")
     )
     germination_date = models.DateField(verbose_name=_("Data de Germinação"), default=datetime.date.today)
-    stage = models.CharField(
-        max_length=4,
-        choices=PlantStage.choices,
-        default=PlantStage.GERMINATION,
+    stage = models.ForeignKey(
+        Stage,
+        on_delete=models.SET_NULL, # Se o estágio for deletado, não delete a planta
+        null=True,                 # Permite nulo
+        blank=True,                # Opcional no formulário
         verbose_name=_("Estágio Atual")
     )
     is_active = models.BooleanField(

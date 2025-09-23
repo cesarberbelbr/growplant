@@ -25,7 +25,9 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ plant.name }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ plant.strain }}</h6>
-                        <span class="badge bg-info">{{ plant.get_stage_display }}</span>
+                        <span class="badge bg-info">
+                            {% if plant.stage %}{{ plant.stage.name }}{% else %}Sem estágio{% endif %}
+                        </span>
                         <span class="badge bg-secondary">{{ plant.age_in_weeks }}</span>
                     </div>
                     <div class="card-footer text-center">
@@ -55,7 +57,9 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ plant.name }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ plant.strain }}</h6>
-                        <span class="badge bg-info">{{ plant.get_stage_display }}</span>
+                        <span class="badge bg-info">
+                            {% if plant.stage %}{{ plant.stage.name }}{% else %}Sem estágio{% endif %}
+                        </span>
                         <span class="badge bg-secondary">{{ plant.age_in_weeks }}</span>
                     </div>
                     <div class="card-footer text-center">

@@ -1,7 +1,8 @@
 # cultivation/forms.py
 
 from django import forms
-from .models import Environment, Lighting, Plant
+from .models import Environment, Lighting, Plant, Stage
+from datetime import date
 
 class EnvironmentForm(forms.ModelForm):
     class Meta:
@@ -33,7 +34,8 @@ class PlantForm(forms.ModelForm):
     # Definimos a data de germinação explicitamente para usar o widget de data do HTML5
     germination_date = forms.DateField(
         label="Data de Germinação",
-        widget=forms.DateInput(attrs={'type': 'date'})
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        initial=date.today #
     )
 
     class Meta:
@@ -44,7 +46,6 @@ class PlantForm(forms.ModelForm):
             'germination_date',
             'stage',
             'environment',
-            'is_active',
         ]
 
     def __init__(self, *args, **kwargs):
@@ -54,3 +55,11 @@ class PlantForm(forms.ModelForm):
         if user:
             # Filtra o campo 'environment' para mostrar apenas os ambientes do usuário logado
             self.fields['environment'].queryset = Environment.objects.filter(owner=user)
+            # Adiciona o filtro para o campo de estágios
+            self.fields['stage'].queryset = Stage.objects.filter(owner=user)
+
+class StageForm(forms.ModelForm):
+    class Meta:
+        model = Stage
+        # O 'owner' será definido na view
+        fields = ['name', 'light_hours_on', 'duration', 'duration_unit']

@@ -32,4 +32,11 @@ urlpatterns = [
     path('plants/add/', views.PlantCreateView.as_view(), name='plant_add'),
     path('plants/<int:pk>/edit/', views.PlantUpdateView.as_view(), name='plant_edit'),
     path('plants/<int:pk>/delete/', views.PlantDeleteView.as_view(), name='plant_delete'),
+
+    # --- NOVAS URLs PARA STAGE (ESTÁGIOS) ---
+    path('stages/', views.StageListView.as_view(), name='stage_list'),
+    path('stages/add/', views.StageCreateView.as_view(), name='stage_add'),
+    path('stages/<int:pk>/edit/', views.StageUpdateView.as_view(), name='stage_edit'),
+    path('stages/<int:pk>/delete/', views.StageDeleteView.as_view(), name='stage_delete'),
+
 ]

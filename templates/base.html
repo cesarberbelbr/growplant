@@ -57,14 +57,21 @@
 
                     <!-- Menu do Perfil para Telas Pequenas (dentro do hambúrguer) -->
                     <hr class="d-lg-none"> <!-- Uma linha divisória que só aparece em telas pequenas -->
+<!--                    <ul class="navbar-nav d-lg-none">-->
+<!--                            <li class="nav-item">-->
+<!--                                <a class="nav-link" href="{% url 'profile_display' %}">Meu Perfil</a>-->
+<!--                            </li>-->
+<!--                            <li class="nav-item">-->
+<!--                                <a class="nav-link text-danger" href="{% url 'logout' %}">Sair</a>-->
+<!--                            </li>-->
+<!--                    </ul>-->
+
                     <ul class="navbar-nav d-lg-none">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'profile_display' %}">Meu Perfil</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-danger" href="{% url 'logout' %}">Sair</a>
-                            </li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'profile_display' %}">Meu Perfil</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'cultivation:stage_list' %}">Meus Estágios</a></li>
+                        <li class="nav-item"><a class="nav-link text-danger" href="{% url 'logout' %}">Sair</a></li>
                     </ul>
+
                 </div>
            {% endif %}
 
@@ -84,14 +91,38 @@
                                 {% endif %}
                             </span>
                         </button>
+<!--                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">-->
+<!--                            <li><a class="dropdown-item" href="{% url 'profile_display' %}">-->
+<!--                                <i class="bi bi-person-fill me-2"></i>Meu Perfil-->
+<!--                            </a></li>-->
+<!--                            <li><hr class="dropdown-divider"></li>-->
+<!--                            <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">-->
+<!--                                <i class="bi bi-box-arrow-right me-2"></i>Sair-->
+<!--                            </a></li>-->
+<!--                        </ul>-->
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                            <li><a class="dropdown-item" href="{% url 'profile_display' %}">
-                                <i class="bi bi-person-fill me-2"></i>Meu Perfil
-                            </a></li>
+                            <li><h6 class="dropdown-header">Minha Conta</h6></li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'profile_display' %}">
+                                    <i class="bi bi-person-fill me-2"></i>Meu Perfil
+                                </a>
+                            </li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">
-                                <i class="bi bi-box-arrow-right me-2"></i>Sair
-                            </a></li>
+
+                            <li><h6 class="dropdown-header">Configurações</h6></li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'cultivation:stage_list' %}">
+                                    <i class="bi bi-gear-fill me-2"></i>Meus Estágios
+                                </a>
+                            </li>
+                            <!-- Você pode adicionar outros links de configuração aqui no futuro -->
+
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Sair
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 {% endif %}
